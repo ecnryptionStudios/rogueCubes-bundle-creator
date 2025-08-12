@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>RogueCubes bundle creator</h1>
+    <p>to start, you code a new cubeling in the format:
+    (name, costumeImage(seeBelow), costumeName, maxHealth, damage, defense, speed, rarity, minimunLevelAppearance, maximumLevelAppearance)
+    </p>
+      <textarea id="area" cols=100 rows=20></textarea>
+      <br>
+      <button id="export">export</button>
+      <p id="result" style="overflow-wrap: break-word;"></p>
+      <br>
+      <br>
+      <p>format in style</p>
+      <p>11111</p>
+      <p>11111</p>
+      <p>...</p>
+      <p id="colors">
+        <div style="wbackground-color: #ffffff;">0</div>
+        <div style="background-color: #ff2121;">1</div>
+        <div style="background-color: #ff93c4;">2</div>
+        <div style="background-color: #ff8135;">3</div>
+        <div style="background-color: #fff609;">4</div>
+        <div style="background-color: #249ca3;">5</div>
+        <div style="background-color: #78dc52;">6</div>
+        <div style="background-color: #003fad;">7</div>
+        <div style="background-color: #87f2ff;">8</div>
+        <div style="background-color: #8e2ec4;">9</div>
+        <div style="background-color: #a4839f;">a</div>
+        <div style="background-color: #5c406c;">b</div>
+        <div style="background-color: #e5cdc4;">c</div>
+        <div style="background-color: #91463d;">d</div>
+        <div style="background-color: #000000; color: white;">e</div>
+        <div class="checkered"></div>
+        <p>.↑</p>
+      </p>
+      <textarea id="image" cols=16 rows=16>....................................................000000000.......000000000.......000000000.......000000eee.......000000eee.......000000eee.......000000000.......000000000.......000000000...................................................................</textarea>
+      <br>
+      <button id="convert">image to string</button>
+      <br>
+      <p id="image result" style="overflow-wrap: break-word;"></p>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          function convertBase(value, from_base, to_base) {
+            const range = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('');
+            const from_range = range.slice(0, from_base);
+            const to_range = range.slice(0, to_base);
+
+            let dec_value = 0n;
+            for (const digit of value) {
+              const val = from_range.indexOf(digit);
+              if (val === -1) throw new Error(`Invalid digit ${digit} for base ${from_base}`);
+              dec_value = dec_value * BigInt(from_base) + BigInt(val);
+            }
+
+            if (dec_value === 0n) return '0';
+
+            let new_value = '';
+            while (dec_value > 0n) {
+              new_value = to_range[Number(dec_value % BigInt(to_base))] + new_value;
+              dec_value /= BigInt(to_base);
+            }
+            return new_value;
+          }
+          document.getElementById("convert").addEventListener("click", ()=>{
+            let area = document.getElementById("image")
+            let data = area.value.replaceAll(".", "f").replaceAll("\n", "")
+            //console.log("data:", data)
+            let f = ""
+            let data2 = data.match(/.{1,16}/g);
+            //console.log("data2:", data2)
+            let final = ""
+            data2.forEach((v)=>{
+              final += v + (data2.indexOf(v)!=data2.length-1?"g":"")
+            })
+            //console.log(final)
+            let fin = convertBase(final, 17, 62)
+            //console.log(fin)
+            document.getElementById("image result").textContent = fin
+          })
+          document.getElementById("export").addEventListener("click", ()=>{
+            let data = document.getElementById("area").value.split("\n")
+            //console.log("data:", data)
+            let data2 = []
+            data.forEach((v)=>data2.push(v.replace("(", "").replace(")", "").split(",")))
+            //console.log("data2:", data2)
+            let data3 = []
+            data2.forEach((v)=>{
+              let f = []
+              v.forEach((d)=>f.push(d.trim()))
+              data3.push(f)
+            })
+            //console.log("data3:", data3)
+            let data4 = []
+            data3.forEach((v)=>{
+              let f = []
+              v.forEach((d)=>f.push(d.split("")))
+              data4.push(f)
+            })
+            //console.log("data4:", data4)
+            let final = ""
+            data4.forEach((v)=>{
+              v.forEach((d)=>{
+                d.forEach((s)=>{
+                  let f = s.charCodeAt(0).toString()
+                  while(f.length<3){
+                    f="0"+f
+                  }
+                  final+=f
+                })
+                if(v.indexOf(d)!=v.length-1)final+="124"
+              })
+              if(data4.indexOf(v)!=data4.length-1)final+="047"
+            })
+            //console.log(final)
+            document.getElementById("result").textContent = convertBase(final, 10, 62)
+          })
+        })
+      </script>
+  </body>
+</html>
