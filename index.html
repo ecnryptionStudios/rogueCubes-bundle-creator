@@ -46,7 +46,7 @@
       <script>
         document.addEventListener('DOMContentLoaded', function() {
           function convertBase(value, from_base, to_base) {
-            const range = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('');
+            const range = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/~`-_=:;,<.>?¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿'.split('');
             const from_range = range.slice(0, from_base);
             const to_range = range.slice(0, to_base);
 
@@ -78,7 +78,7 @@
               final += v + (data2.indexOf(v)!=data2.length-1?"g":"")
             })
             //console.log(final)
-            let fin = convertBase(final, 17, 62)
+            let fin = convertBase(final, 17, 106)
             //console.log(fin)
             document.getElementById("image result").textContent = fin
           })
@@ -117,7 +117,7 @@
               if(data4.indexOf(v)!=data4.length-1)final+="047"
             })
             //console.log(final)
-            document.getElementById("result").textContent = convertBase(final, 10, 62)
+            document.getElementById("result").textContent = convertBase(final, 10, 106)
           })
         })
       </script>
